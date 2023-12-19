@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Checkout source code
-                git 'https://github.com/your/repository.git'
+                git 'https://github.com/save007854/devops-demo.git'
  
                 // Build your application
                 sh 'mvn clean install'
