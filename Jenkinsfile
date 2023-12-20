@@ -1,37 +1,25 @@
+// Example Jenkinsfile snippet
 pipeline {
     agent any
- 
+
     stages {
         stage('Build') {
             steps {
-                // Checkout source code
-                git 'https://github.com/save007854/devops-demo.git'
- 
-                // Build your application
-                sh 'mvn clean install'
- 
-                // Build Docker image
-                sh 'docker build -t your-image-name .'
+                // Build your React app
+                sh 'npm install'
+                sh 'npm run build'
             }
         }
- 
-        stage('Deploy to Portainer') {
+        stage('Deploy') {
             steps {
-                // Push Docker image to registry
-                sh 'docker push your-image-name'
- 
-                // Use Portainer API to deploy the container
+                // Push the built Docker image to your registry
+                sh 'docker push your-registry/your-react-app:latest'
+                
+                // Deploy the updated stack to Portainer
                 script {
-                    def portainerAPI = 'http://your-portainer-url/api/endpoints/1/docker/containers/create'
-                    def containerConfig = '{"Image": "your-image-name"}'
- 
-                    def response = sh(script: "curl -X POST -H 'Content-Type: application/json' -d '${containerConfig}' ${portainerAPI}", returnStdout: true).trim()
- 
-                    // Extract container ID from the response
-                    def containerId = readJSON(text: response).Id
- 
-                    // Start the container
-                    sh "curl -X POST ${portainerAPI}/${containerId}/start"
+                    docker.withRegistry('https://your-registry', 'your-registry-credentials') {
+                        sh 'docker stack deploy -c docker-compose.yml your-stack-name'
+                    }
                 }
             }
         }
