@@ -1,4 +1,4 @@
-// Example Jenkinsfile snippet
+// สร้างการทำงานที่ประกอบไปด้วยหลายขั้นตอน
 pipeline {
     agent any
 
@@ -8,6 +8,8 @@ pipeline {
                 // Build your React app
                 sh 'npm install'
                 sh 'npm run build'
+                sh 'node -v'
+                sh 'npm -v'
             }
         }
         stage('Deploy') {

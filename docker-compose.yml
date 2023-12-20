@@ -3,4 +3,4 @@ services:
   react-app:
     image: your-react-app-image:latest
     ports:
-      - "8080:80"
+      - "7000:80"
